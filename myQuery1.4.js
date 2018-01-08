@@ -1,17 +1,6 @@
 /*
 * 2018.01.08
 * author：Angel*/
-function $(el){
-    var firstLetter = el.substr(0, 1);
-    var name = el.substr(1);
-    if (firstLetter == '#'){
-        return document.getElementById(name);
-    }else if(firstLetter == '.'){
-        return document.getElementsByClassName(name);
-    }else{
-        return document.getElementsByTagName(el);
-    }
-}
 
 /**
  * 获取滚动条距离顶部和左侧的距离，兼容IE6+,Firefox,Chrome等
