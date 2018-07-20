@@ -458,3 +458,24 @@ function removeClass(el, className) {
 function random() {
   return Math.random();
 }
+
+
+export function getUrlParam () {
+  let result = {}
+  let key = ''
+  let str = ''
+  let arr = []
+  let i = 0
+  let len = 0
+
+  str = window.location.search.substr(1)
+  if (str.length === 0) return
+  arr = str.split('&')
+  len = arr.length
+
+  for (; i < len; i++) {
+    key = arr[i].split('=')[0]
+    result[key] = encodeURIComponent(arr[i].split('=')[1])
+  }
+  return result
+}
