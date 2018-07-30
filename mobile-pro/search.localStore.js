@@ -16,10 +16,16 @@
     return this.history
   }
   
-  Storage.prototype.setStorage = function () {
-    this.value = this.input.value.replace(/(^\s*)|(\s*$)/g, '')
-    this.value = this.value.replace(/</, '&lt;')
-    this.value = this.value.replace(/>/, '&gt;')
+  Storage.prototype.setStorage = function (val) {
+    // 如果有传入值
+    if(val) {
+      this.value = val
+      console.log('val-23')
+    } else {
+      this.value = this.input.value.replace(/(^\s*)|(\s*$)/g, '')
+      this.value = this.value.replace(/</, '&lt;')
+      this.value = this.value.replace(/>/, '&gt;')
+    }
     this.checkStorage()
     var history
     if (this.history) {
