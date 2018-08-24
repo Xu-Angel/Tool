@@ -182,7 +182,7 @@ function Time(time) {
     miles
   }
 }
-
+//!todo/*   经过网上查找相关资料，得知，‘year-month-day’ 的格式只有 webkit内核浏览器 可用，而 ‘year/month/ady’ 格式适用于所有内核的浏览器，故平时编码，使用Date对象进行初始化时，建议使用‘year/month/day’格式 */
 /**
  * 
  * @param {*} time 秒杀时间eg '2018/07/09 20:16:0'
@@ -219,6 +219,118 @@ function seckillTime(time, day, hour, min, sec) {
     show()
   }, 1000)
 }
+//!todo/* 倒计时的封装
+/*封装的倒计时插件，异步回调方式使用 */
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+
+(function(){
+    function countDown(targetTime, timing, timend) {
+        var nowTime = new Date().getTime()
+        targetTime = new Date(targetTime).getTime()
+        var timeRemaining = (+targetTime) - (+nowTime)
+
+        var numberCountTest = function(value) {
+            var numberTest = /^\d{2}$/
+
+            if(numberTest.test(value)) {
+                return value
+            } else {
+                return '0' + value
+            }
+        }
+
+        var getDay = function(millisecond) {
+            return numberCountTest(Math.floor(millisecond / 1000 / 60 / 60 / 24))
+        }
+
+        var getHours = function(millisecond) {
+            return numberCountTest(Math.floor(millisecond / 1000 / 60 / 60 % 24))
+        }
+
+        var getMinute = function(millisecond) {
+            return numberCountTest(Math.floor(millisecond / 1000 / 60 % 60))
+        }
+
+        var getSecond = function(millisecond) {
+            return numberCountTest(Math.floor(millisecond / 1000 % 60))
+        }
+
+        var timed = setInterval(function() {
+            timeRemaining -= 1000
+            if(timeRemaining <= 0) {
+                clearInterval(timed)
+                timend()
+            }else {
+                var timeObj = {
+                    day: getDay(timeRemaining),
+                    hours: getHours(timeRemaining),
+                    minute: getMinute(timeRemaining),
+                    second: getSecond(timeRemaining)
+                }
+                timing(timeObj)
+            }
+        }, 1000)
+    }
+    countDown('2017/11/4 17:21:00', function(timeObj) {
+        // console.log(timeObj.day, timeObj.hours, timeObj.minute, timeObj.second)
+    }, function() {
+        console.log('timed end')
+    })
+}())
 /**
  * 获取滚动条距离顶部和左侧的距离，兼容IE6+,Firefox,Chrome等
  */
@@ -518,3 +630,87 @@ export function strToDom (str) {
 
 var tableTr = strToDom('<tr><td>Simple text</td></tr>');
 document.querySelector('body').appendChild(tableTr);
+/**
+ * @desc   格式化${startTime}距现在的已过时间
+ * @param  {Date} startTime 
+ * @return {String}
+ */
+export function formatPassTime(startTime) {
+  var currentTime = Date.parse(new Date()),
+      time = currentTime - startTime,
+      day = parseInt(time / (1000 * 60 * 60 * 24)),
+      hour = parseInt(time / (1000 * 60 * 60)),
+      min = parseInt(time / (1000 * 60)),
+      month = parseInt(day / 30),
+      year = parseInt(month / 12);
+  if (year) return year + "年前"
+  if (month) return month + "个月前"
+  if (day) return day + "天前"
+  if (hour) return hour + "小时前"
+  if (min) return min + "分钟前"
+  else return '刚刚'
+}
+
+/**
+ * 
+ * @desc   对象序列化
+ * @param  {Object} obj 
+ * @return {String}
+ */
+export function stringfyQueryString(obj) {
+  if (!obj) return '';
+  var pairs = [];
+
+  for (var key in obj) {
+      var value = obj[key];
+
+      if (value instanceof Array) {
+          for (var i = 0; i < value.length; ++i) {
+              pairs.push(encodeURIComponent(key + '[' + i + ']') + '=' + encodeURIComponent(value[i]));
+          }
+          continue;
+      }
+
+      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+  }
+
+  return pairs.join('&');
+}
+
+var obj = {o: 'o', p: 'pp'}
+console.log(stringfyQueryString(obj));
+
+/**
+ * 
+ * @desc H5软键盘缩回、弹起回调
+ * 当软件键盘弹起会改变当前 window.innerHeight，监听这个值变化
+ * @param {Function} downCb 当软键盘弹起后，缩回的回调
+ * @param {Function} upCb 当软键盘弹起的回调
+ */
+
+function windowResize(downCb, upCb) {
+	var clientHeight = window.innerHeight;
+	downCb = typeof downCb === 'function' ? downCb : function () {}
+	upCb = typeof upCb === 'function' ? upCb : function () {}
+	window.addEventListener('resize', () => {
+		var height = window.innerHeight;
+		if (height === clientHeight) {
+			downCb();
+		}
+		if (height < clientHeight) {
+			upCb();
+		}
+	});
+}
+
+//使用Boolean过滤数组中的所有假值
+//我们知道JS中有一些假值：false，null，0，""，undefined，NaN，怎样把数
+const compact = arr => arr.filter(Boolean)
+compact([0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34])             // [ 1, 2, 3, 'a', 's', 34 ]
+[0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34].filter(Boolean)
+
+//有时候比如显示时间的时候有时候会需要把一位数字显示成两位，这时候就需要补0操作，可以使用slice和string的padStart方法
+const addZero1 = (num, len = 2) => (`0${num}`).slice(-len)
+const addZero2 = (num, len = 2) => (`${num}`).padStart(len , '0')
+addZero1(3) // 03
+addZero2(32,4)  // 0032
