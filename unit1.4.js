@@ -714,3 +714,19 @@ const addZero1 = (num, len = 2) => (`0${num}`).slice(-len)
 const addZero2 = (num, len = 2) => (`${num}`).padStart(len , '0')
 addZero1(3) // 03
 addZero2(32,4)  // 0032
+
+ //格式化日期
+ function formateDate(date) {
+  var y = date.getFullYear();
+  var m = date.getMonth() + 1;
+  var d = date.getDate();
+  var h = date.getHours();
+  var mi = date.getMinutes();
+  m = m > 9 ? m : '0' + m;
+  return y + '-' + m + '-' + d + ' ' + h + ':' + mi;
+}
+
+//删除节点
+function removeNode(node) {
+  node.parentNode.removeChild(node);
+}
