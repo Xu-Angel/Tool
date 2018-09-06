@@ -772,3 +772,14 @@ function move(obj,json,option){
       }
   },30);
 }
+
+//时间戳转JS时间********************************************
+function setTime(t){
+  function toDou(n){
+    return n<10?'0'+n:''+n;
+  }
+  var oDate=new Date();
+  oDate.setTime(t*1000);
+
+  return oDate.getFullYear()+'-'+(oDate.getMonth()+1)+'-'+oDate.getDate()+'  '+toDou(oDate.getHours())+':'+toDou(oDate.getMinutes())+':'+toDou(oDate.getSeconds());
+}
