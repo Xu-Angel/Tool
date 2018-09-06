@@ -714,3 +714,101 @@ const addZero1 = (num, len = 2) => (`0${num}`).slice(-len)
 const addZero2 = (num, len = 2) => (`${num}`).padStart(len , '0')
 addZero1(3) // 03
 addZero2(32,4)  // 0032
+//时间戳转JS时间********************************************
+function setTime(t){
+  function toDou(n){
+    return n<10?'0'+n:''+n;
+  }
+  var oDate=new Date();
+  oDate.setTime(t*1000);
+
+  return oDate.getFullYear()+'-'+(oDate.getMonth()+1)+'-'+oDate.getDate()+'  '+toDou(oDate.getHours())+':'+toDou(oDate.getMinutes())+':'+toDou(oDate.getSeconds());
+}
+//运动框架***************************************
+function move(obj,json,option){
+  var option=option || {};
+  var duration=option.duration || 1000;
+  var easing=option.easing || 'linear';
+  var start={};  //寸初始值
+  var dis={};//存总路程
+  //json->{'width':300,'height':300,'opacity':0}
+  //start->{width:100,height:100,opacity:1}
+  //dis ->{width:200,height:200,opacity:1}
+  for(var name in json){
+      start[name]=parseFloat(getStyle(obj,name));
+      //start['width']=100;
+      dis[name]=json[name]-start[name];
+      //dis['width']=200;
+  }
+
+  var count= Math.ceil(duration/30);   //总次数
+  var n=0;  //循环需要统计的次数
+
+  clearInterval(obj.timer);
+  obj.timer=setInterval(function(){
+      n++;
+      for(var name in json){
+          switch (easing){
+              case 'linear':   //匀速
+                  var a=n/count;
+                  var cur=start[name]+dis[name]*a;
+                  break;
+              case 'ease-in':  // 加速
+                  var a=n/count;
+                  var cur=start[name]+dis[name]*a*a*a;
+                  break;
+              case 'ease-out':  //减速
+                  var a=1-n/count;
+                  var cur=start[name]+dis[name]*(1-a*a*a);
+                  break
+          }
+          if(name=='opacity'){
+              obj.style.opacity=cur;
+          }else{
+              obj.style[name]=cur+'px';
+          }
+      }
+
+      if(n==count){
+          clearInterval(obj.timer);
+          option.complete && option.complete();
+      }
+  },30);
+}
+//获取计算过后的样式***************************
+/*function getStyle(obj,sName){
+    if(obj.currentStyle){
+        return obj.currentStyle[sName];
+    }else{
+        return getComputedStyle(obj,false)[sName];
+    }
+}*/
+//获取计算过后的样式***************************
+function getStyle(obj,sName){
+  return (obj.currentStyle || getComputedStyle(obj,false))[sName]
+}
+
+//查找数组中的最大值********************************************
+function findMax(arr){
+  var iMax=arr[0];
+  for(var i=0; i<arr.length; i++){
+      if(arr[i]>iMax){
+          iMax=arr[i];
+      }
+  }
+  return iMax;
+}
+
+//查找数组中的最小值********************************************
+function findMin(arr){
+  var iMin=arr[0];
+  for(var i=0; i<arr.length; i++){
+      if(arr[i]<iMin){
+          iMin=arr[i];
+      }
+  }
+  return iMin;
+}
+
+// 日期整理：利用字符串的replace替换功能+正则匹配 如 str ='20160920145530';
+str.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,'$1-$2-$3 $4:$5:$6')  => 2016-09-20 14:55:30 格式自己随便写，看情况
