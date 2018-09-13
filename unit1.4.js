@@ -811,4 +811,49 @@ function findMin(arr){
 }
 
 // 日期整理：利用字符串的replace替换功能+正则匹配 如 str ='20160920145530';
-str.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,'$1-$2-$3 $4:$5:$6')  => 2016-09-20 14:55:30 格式自己随便写，看情况
+str.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,'$1-$2-$3 $4:$5:$6') // => 2016-09-20 14:55:30 格式自己随便写，看情况
+
+/* 兼容classList（ie9）
+错误信息：
+无法获取未定义或 null 引用的属性“add”
+无法获取未定义或 null 引用的属性“remove”
+如果你查看sourceMap发现了classList().add或classList.remove()等等，那肯定是classList的问题了。 */
+
+if (!('classList' in document.documentElement)) {
+  Object.defineProperty(HTMLElement.prototype, 'classList', {
+      get: function () {
+          var self = this;
+          function update(fn) {
+              return function (value) {
+                  var classes = self.className.split(/\s+/g);
+                  var index = classes.indexOf(value);
+
+                  fn(classes, index, value);
+                  self.className = classes.join(' ');
+              };
+          }
+
+          return {
+              add: update(function (classes, index, value) {
+                  if (!~index) classes.push(value);
+              }),
+
+              remove: update(function (classes, index) {
+                  if (~index) classes.splice(index, 1);
+              }),
+
+              toggle: update(function (classes, index, value) {
+                  if (~index) { classes.splice(index, 1); } else { classes.push(value); }
+              }),
+
+              contains: function (value) {
+                  return !!~self.className.split(/\s+/g).indexOf(value);
+              },
+
+              item: function (i) {
+                  return self.className.split(/\s+/g)[i] || null;
+              },
+          };
+      },
+  });
+}
