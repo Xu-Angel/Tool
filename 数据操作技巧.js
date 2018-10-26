@@ -73,13 +73,20 @@ const difference = (a, b) => {
 }
 difference([1, 2, 3], [1, 2, 4]); // [3]
 
-/*  找出两数组中相同的值 */
+/*  找出两数组中相同的值 */ // intersection 美 /,ɪntɚ'sɛkʃən/ 
 //1. Set数据结构中有 has()方法
 const common = (a, b) => {
   const s = new Set(b)
   return a.filter(v => s.has(v))
 }
 common([1, 2, 3], [1, 2, 4]); // [1, 2]
+
+//2. 符合规则的分组
+const intersectionBy = (a, b, fn) => {
+  const s = new Set(b.map(fn))
+  return a.filter(v => s.has(fn(v)))
+}
+intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [2.1]
 
 /* 找出数组中匹配指定值的第一值的索引 */
 //1. findIndex
@@ -194,3 +201,17 @@ const groupBy = (arr, fn) =>
   }, {});
 groupBy([6.1, 4.2, 6.3], Math.floor); // {4: [4.2], 6: [6.1, 6.3]}
 groupBy(['one', 'two', 'three'], 'length'); // {3: ['one', 'two'], 5: ['three']}
+
+/* 数组排序 升序 降序 */
+// 1.0 entries 方法
+const isSorted = arr => {
+  let direction = -(arr[0] - arr[1])
+  for(let [i, val] of arr.entries()) {
+    direction = !direction ? -(arr[i -1] -arr[i]) : direction
+    if (i === arr.length -1) return !direction ? 0 : direction
+    else if (val- arr[i + 1] * direction > 0) return 0
+  }
+}
+isSorted([0, 1, 2, 2]); // 1
+isSorted([4, 3, 2]); // -1
+isSorted([4, 3, 5]); // 0
