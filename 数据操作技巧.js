@@ -80,6 +80,9 @@ const common = (a, b) => {
   return a.filter(v => s.has(v))
 }
 common([1, 2, 3], [1, 2, 4]); // [1, 2]
+// 1.5 includes
+const similarity = (arr, values) => arr.filter(v => values.includes(v))
+similarity([1, 2, 3], [1, 2, 4]) // [1, 2]
 
 //2. 符合规则的分组
 const intersectionBy = (a, b, fn) => {
@@ -87,6 +90,16 @@ const intersectionBy = (a, b, fn) => {
   return a.filter(v => s.has(fn(v)))
 }
 intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [2.1]
+
+
+/* 数组中最长的项 */
+//1.0 reduce
+const longestItem = (...vals) => vals.reduce((pre, cur) => (cur.length > pre.length ? cur  : pre))
+longestItem('this', 'is', 'a', 'testcase'); // 'testcase'
+longestItem(...['a', 'ab', 'abc']); // 'abc'
+longestItem(...['a', 'ab', 'abc'], 'abcd'); // 'abcd'
+longestItem([1, 2, 3], [1, 2], [1, 2, 3, 4, 5]); // [1, 2, 3, 4, 5]
+longestItem([1, 2, 3], 'foobar'); // 'foobar'
 
 /* 找出数组中匹配指定值的第一值的索引 */
 //1. findIndex
@@ -98,6 +111,25 @@ index([1, 2, 4], 4)  // 2
 const indexOfAll = (arr, val) => arr.reduce((pre, cur, i) => (cur === val ? [...pre, i] : pre), [])
 indexOfAll([1, 2, 3, 1, 2, 3], 1); // [0,3]
 indexOfAll([1, 2, 3], 4); // []
+
+
+/* 找去排序的索引 */
+const sortedIndex = (arr, n) => {
+  const isDescending = arr[0] > arr[arr.length - 1];
+  const index = arr.findIndex(el => (isDescending ? n >= el : n <= el));
+  return index === -1 ? arr.length : index;
+};
+sortedIndex([5, 3, 2, 1], 4); // 1
+sortedIndex([30, 50], 40); // 1
+sortedIndex([30, 50], 30); // 0
+
+/* 该值中最后的一个值的索引 */
+const sortedLastIndex = (arr, n) => {
+  const isDescending = arr[0] > arr[arr.length - 1];
+  const index = arr.reverse().findIndex(el => (isDescending ? n <= el : n >= el));
+  return index === -1 ? 0 : arr.length - index;
+};
+sortedLastIndex([10, 20, 30, 30, 40], 30); // 4
 
 /* 数组连接 */
 
@@ -121,6 +153,10 @@ const arr = [...new Set(arr)]
 //2. 通过索引来判断
 arr.filter((v, i, arr)=> arr.indexOf(v) === arr.lastIndexOf(v))
 
+/* 数组去重并且合并 */
+const union = (a, b) => Array.from(new Set([...a, ...b]));
+union([1, 2, 3], [4, 3, 2]); // [1,2,3,4]
+
 /* 删除对象中不需要的参数 || 抽取对象中某部分*/
 const Obj =  { boy1: "sunshine", boy2: "sunshine", girl1: "beautiful", girl2: "very beautiful", girl2: "very beautiful", girl2: "very very beautiful" }
 // 拿出除了 boy类外 girl
@@ -138,6 +174,30 @@ arr.sort(function(){
     return Math.random() - 0.5;
 })
 console.log(arr);
+
+/* 取出数组中从大到小排序，执行项数长度的数组 */
+//1.0 Use Array.prototype.sort() combined with the spread operator (...) to create a shallow clone of the array and sort it in descending order. Use Array.prototype.slice() to get the specified number of elements. Omit the second argument, n, to get a one-element array.
+const maxN = (arr, n = 1) => [...arr].sort((a, b) => b -a).slice(0, n)
+maxN([1,2,3]) // [3]
+maxN([1,2,3], 2) // [3, 2]
+/* 取出数组中从小到大排序，指定项数长度的数组 */
+const mixN = (arr, n = 1) => [...arr].sort((a, b) => a - b).slice(0, n)
+minN([1, 2, 3]); // [1]
+minN([1, 2, 3], 2); // [1,2]
+
+
+/* 取出数组中指定位置的值 */
+//1.0 slice方法
+const nthElement = (arr, n =0) => (n === -1 ? arr.slice(n) : arr.slice(n, n + 1))[0]
+nthElement(['a', 'b', 'c'], 1); // 'b'
+nthElement(['a', 'b', 'b'], -3); // 'a'
+
+
+/* 数组偏移 */
+//1.0 slice
+const offset = (arr, offset) => [...arr.slice(offset), ...arr.offset(0, offset)]
+offset([1, 2, 3, 4, 5], 2); // [3, 4, 5, 1, 2]
+offset([1, 2, 3, 4, 5], -2); // [4, 5, 1, 2, 3]
 
 /* 取出一个数组中的最大值和最小值 */
 
@@ -215,3 +275,28 @@ const isSorted = arr => {
 isSorted([0, 1, 2, 2]); // 1
 isSorted([4, 3, 2]); // -1
 isSorted([4, 3, 5]); // 0
+
+/* TODO:列举数组所有组合可能性 */
+
+const permutations = arr => {
+  if (arr.length <= 2) return arr.length === 2 ? [arr, [arr[1], arr[0]]] : arr;
+  return arr.reduce(
+    (acc, item, i) =>
+      acc.concat(
+        permutations([...arr.slice(0, i), ...arr.slice(i + 1)]).map(val => [item, ...val])
+      ),
+    []
+  );
+};
+permutations([1, 33, 5]); // [ [ 1, 33, 5 ], [ 1, 5, 33 ], [ 33, 1, 5 ], [ 33, 5, 1 ], [ 5, 1, 33 ], [ 5, 33, 1 ] ]
+
+/* ES6 高仿splice 但不改变原数组*/
+const shank = (arr, index = 0, delCount = 0, ...elements) =>
+  arr
+    .slice(0, index)
+    .concat(elements)
+    .concat(arr.slice(index + delCount));
+const names = ['alpha', 'bravo', 'charlie'];
+const namesAndDelta = shank(names, 1, 0, 'delta'); // [ 'alpha', 'delta', 'bravo', 'charlie' ]
+const namesNoBravo = shank(names, 1, 1); // [ 'alpha', 'charlie' ]
+console.log(names); // ['alpha', 'bravo', 'charlie']
