@@ -1,0 +1,30 @@
+.js_confirm_overlay._confirm_modal(style="z-index: 1000;")
+  ._confrim_details
+    p._confirm_gutter
+    p._confirm_img_box
+      if type === 1
+        img(src=require('../../common/icon/success.png'))
+      else if type === 2
+        img(src=require('../../common/icon/fail.png'))
+    if type === 3 || type ===4
+      ._confirm_img_big
+        if type === 3
+          img(src=require('../../common/icon/success_big.png'))
+        else
+          img(src=require('../../common/icon/fail_big.png'))
+    if title
+      ._confirm_title #{title}
+    if type === 2
+      ._confirm_content._confirm_fail.
+        !{content}
+    else
+      ._confirm_content.
+        !{content}
+    //- 可选
+    if left && right
+      div._confirm_button
+        a(javascript:;).js_confirm_cancel._confirm_cancel #{left}
+        a(javascript:;).js_confirm_sure._confirm_sure #{right}
+    if bottom
+      ._confirm_button
+        a(javascript:;).js_confirm_bottom._confirm_bottom #{bottom}

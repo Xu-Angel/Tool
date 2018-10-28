@@ -1,0 +1,136 @@
+@import "./1px.scss";
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+    -webkit-transform: scale3d(0.3, 0.3, 0.3);
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+._confirm_modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  max-width: 640px;
+  margin: 0 auto;
+  background: rgba(45, 45, 45, .6);
+  align-items: center;
+  justify-content: center;
+  transition: opacity .2s;
+  img {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
+}
+
+._confrim_details {
+  width: 5.04rem;
+  background: #fff;
+  border-radius: .14rem;
+  animation: zoom-in .2s;
+
+  p {
+    text-align: center;
+  }
+
+}
+
+._confirm_button {
+  height: .76rem;
+  line-height: .76rem;
+  text-align: center;
+  @include b-2px-t;
+
+  a {
+    display: inline-block;
+    min-width: 50%;
+    font-size: .27rem;
+    cursor: pointer;
+  }
+
+  ._confirm_sure {
+    color: #2674ff;
+    @include b-1px-l();
+  }
+
+  ._confirm_cancel {
+    color: #848484;
+  }
+
+  ._confirm_bottom {
+    color: #40AFFE;
+  }
+
+}
+
+._confirm_title {
+  padding: 0;
+  margin-top: .15rem;
+  margin-bottom: .15rem;
+  overflow: hidden;
+  font-size: .27rem;
+  line-height: 1.2;
+  color: #333;
+  text-align: center;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  white-space: nowrap;
+}
+
+._confirm_img_box img {
+  width: .52rem;
+  max-width: .52rem;
+}
+
+._confirm_content {
+  padding-bottom: .5rem;
+  margin-top: .15rem;
+  overflow: hidden;
+  font-size: .24rem;
+  text-align: center;
+}
+
+._confirm_fail {
+  font-size: .24rem;
+  line-height: 1.2;
+  color: #999;
+}
+
+._confirm_gutter {
+  height: .35rem;
+  margin-bottom: .15rem;
+  @include b-2px-b($c: transparent);
+}
+
+._confirm_img_big {
+  display: block;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0 auto;
+  margin-bottom: .3rem;
+}
