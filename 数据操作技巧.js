@@ -12,6 +12,17 @@ const [user, account] = await Promise.all([
   fetch('/account')
 ])
 
+// 清空或截断数组
+// 在不重新给数组赋值的情况下，清空或截断数组的最简单方法是更改​​其 length 属性值：
+const arr = [11, 22, 33, 44, 55, 66];
+// truncanting
+arr.length = 3;
+console.log(arr); //=> [11, 22, 33]
+// clearing
+arr.length = 0;
+console.log(arr); //=> []
+console.log(arr[2]); //=> undefined
+
 // 数组最大值
 
 
