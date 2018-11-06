@@ -159,10 +159,10 @@ function leftAnimate(obj, target, sp) {
  * 
  * @param {*} time 传入倒计时，eg '2018/07/09 20:16:0'，返回天时分秒毫秒
  */
-function Time(time) {
+function getTime(time) {
   let end = new Date(time).getTime()
   let now = Date.now()
-  let range = end - now
+  let range = (+end) - (+now)
   let day = parseInt(range / (24 * 3600000))
   range = range % (24 * 3600000)
   let hours = parseInt(range / 3600000)
@@ -191,92 +191,34 @@ function Time(time) {
  * @param {*} min  min填充元素
  * @param {*} sec  sec填充元素
  */
-function seckillTime(time, day, hour, min, sec) {
-  Time(time)
-  /**
-   * 
-   * @param {type:Number} val  units digit to tens digit
-   */
+function seckillTime(time, day, hour, min, sec, cb) {
   function convert(val) {
     return val >= 10 ? val : '0' + val
   }
 
   function show() {
-    day.innerText = convert(Time().day)
-    hour.innerText = convert(Time().hours)
-    min.innerText = convert(Time().minutes)
-    sec.innerText = convert(Time().seconds)
+    const Time = getTime(time)
+    day.innerText = convert(Time.day)
+    hour.innerText = convert(Time.hours)
+    min.innerText = convert(Time.minutes)
+    sec.innerText = convert(Time.seconds)
   }
   show()
-  const timer = setInterval(function() {
+  const timer = setInterval(function () {
+    const Time = getTime(time)
     let zero = 0
-    for (let key in Time()) {
-      zero += Time()[key]
-    }
+    zero += Time['day']
+    zero += Time['hours']
+    zero += Time['seconds']
     if (zero === 0) {
       clearInterval(timer)
+      cb && cb()
     }
     show()
   }, 1000)
 }
 //!todo/* 倒计时的封装
 /*封装的倒计时插件，异步回调方式使用 */
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-
 (function(){
     function countDown(targetTime, timing, timend) {
         var nowTime = new Date().getTime()
@@ -590,6 +532,20 @@ export function getUrlParam () {
     result[key] = encodeURIComponent(arr[i].split('=')[1])
   }
   return result
+}
+// 正则 https://happycoder.net/parse-querystring-using-regexp/
+function parseQueryString(str) {
+  var reg = /(([^?&=]+)(?:=([^?&=]*))*)/g;
+  var result = {};
+  var match;
+  var key;
+  var value;
+  while (match = reg.exec(str)) {
+      key = match[2];
+      value = match[3] || '';
+      result[key] = decodeURIComponent(value);
+  }
+  return result;
 }
 
 export function strToDom (str) {
