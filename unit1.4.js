@@ -209,6 +209,7 @@ function seckillTime(time, day, hour, min, sec, cb) {
     let zero = 0
     zero += Time['day']
     zero += Time['hours']
+    zero += Time['minutes']
     zero += Time['seconds']
     if (zero === 0) {
       clearInterval(timer)
