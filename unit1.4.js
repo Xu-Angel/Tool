@@ -531,7 +531,12 @@ export function getUrlParam () {
   for (; i < len; i++) {
     key = arr[i].split('=')[0]
     // 根据具体需求 选择是否过滤空值
-    if(arr[i].split('=')[1] === undefined ||arr[i].split('=')[1] === 'undefined' ){continue} 
+    if(arr[i].split('=')[1] === undefined ||arr[i].split('=')[1] === 'undefined' ){
+      key = arr[i - 1].split('=')[0]
+      result[key] = result[key] + '&' + arr[i]
+      continue
+    } 
+    key = arr[i].split('=')[0]
     result[key] = encodeURIComponent(arr[i].split('=')[1])
   }
   return result
@@ -545,9 +550,7 @@ function parseQueryString(str) {
   var value;
   while (match = reg.exec(str)) {
       key = match[2];
-      // 根据具体需求 选择是否过滤空值
       value = match[3] || '';
-      if (value === undefined) continue
       result[key] = decodeURIComponent(value);
   }
   return result;
