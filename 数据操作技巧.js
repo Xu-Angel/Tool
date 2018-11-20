@@ -203,6 +203,13 @@ const nthElement = (arr, n =0) => (n === -1 ? arr.slice(n) : arr.slice(n, n + 1)
 nthElement(['a', 'b', 'c'], 1); // 'b'
 nthElement(['a', 'b', 'b'], -3); // 'a'
 
+/* converge  数组平均值 */
+const converge = (converger, fns) => (...args) => converger(...fns.map(fn => fn.apply(null, args)));
+const average = converge((a, b) => a / b, [
+  arr => arr.reduce((a, v) => a + v, 0),
+  arr => arr.length
+]);
+average([1, 2, 3, 4, 5, 6, 7]); // 4
 
 /* 数组偏移 */
 //1.0 slice

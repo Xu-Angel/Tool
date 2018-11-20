@@ -1,7 +1,7 @@
 
 
 /* 函数防抖 debounce  那么多秒执行一次*/
-
+//1.0
 function debounce(func, delay) {
   var timeout;
   return function(e) {
@@ -23,6 +23,21 @@ var validate = debounce(function(e) {
 // 绑定监听
 document.querySelector("input").addEventListener('input', validate);
 
+// 2.0
+const debounce = (fn, ms = 0) => {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), ms);
+  };
+};
+window.addEventListener(
+  'resize',
+  debounce(() => {
+    console.log(window.innerWidth);
+    console.log(window.innerHeight);
+  }, 250)
+); // Will log the window dimensions at most every 250ms
 
 /* Throttle 节流方法，用来返回一个新函数。只有当两次触发之间的时间间隔大于事先设定的值，这个新函数才会运行实际的任务。 */
 
@@ -63,6 +78,17 @@ Math.guid = function(){
     }).toUpperCase();
 };
 
+
+
+/* TODO:defer */
+const defer = (fn, ...args) => setTimeout(fn, 1, ...args);
+// Example A:
+defer(console.log, 'a'), console.log('b'); // logs 'b' then 'a'
+
+// Example B:
+document.querySelector('#someElement').innerHTML = 'Hello';
+longRunningFunction(); // Browser will not update the HTML until this has finished
+defer(longRunningFunction); // Browser will update the HTML then run the function
 
 /* 实现包含关系(`contains`) */
 
@@ -210,3 +236,26 @@ fnJsLoad('https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js', function(){
 function camel2Underline(name) {
   return name.match(/[a-z][0-9]+|[A-Z][a-z0-9]*/g).join('_').toLowerCase()
 }
+
+
+/* 异步链式调用 */
+const chainAsync = fns => {
+  let curr = 0;
+  const next = () => fns[curr++](next);
+  next();
+};
+chainAsync([
+  next => {
+    console.log('0 seconds');
+    setTimeout(next, 1000);
+  },
+  next => {
+    console.log('1 second');
+  }
+]);
+
+/* curry 柯西化 */
+const curry = (fn, arity = fn.length, ...args) =>
+  arity <= args.length ? fn(...args) : curry.bind(null, fn, arity, ...args);
+curry(Math.pow)(2)(10); // 1024
+curry(Math.min, 3)(10)(50)(2); // 2
