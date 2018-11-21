@@ -1,4 +1,127 @@
 
+/* 是否为绝对URL */
+
+const isAbsoluteURL = str => /^[a-z][a-z0-9+.-]*:/.test(str);
+isAbsoluteURL('https://google.com'); // true
+isAbsoluteURL('ftp://www.myserver.net'); // true
+isAbsoluteURL('/foo/bar'); // false
+
+/* 操作驼峰命名 */
+const fromCamelCase = (str, separator = '_') =>
+  str
+    .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
+    .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
+    .toLowerCase();
+fromCamelCase('someDatabaseFieldName', ' '); // 'some database field name'
+fromCamelCase('someLabelThatNeedsToBeCamelized', '-'); // 'some-label-that-needs-to-be-camelized'
+fromCamelCase('someJavascriptProperty', '_'); // 'some_javascript_property'
+
+/* 是否为有效JSON */
+const isValidJSON = obj => {
+  try {
+    JSON.parse(obj);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+isValidJSON('{"name":"Adam","age":20}'); // true
+isValidJSON('{"name":"Adam",age:"20"}'); // false
+isValidJSON(null); // true
+
+/* 是否为原始对象
+Checks if the provided value is an object created by the Object constructor.
+
+Check if the provided value is truthy, use typeof to check if it is an object and Object.constructor to make sure the constructor is equal to Object. */
+const isPlainObject = val => !!val && typeof val === 'object' && val.constructor === Object;
+isPlainObject({ a: 1 }); // true
+isPlainObject(new Map()); // false
+
+
+/* isnil 是否为null undefined Returns true if the specified value is null or undefined, false otherwise.*/
+
+const isNil = val => val === undefined || val === null;
+isNil(null); // true
+isNil(undefined); // true
+
+/* 是否為null Returns true if the specified value is null, false otherwise. */
+const isNull = val => val === null;
+isNull(null); // true
+
+/* 集合是否为空 Returns true if the a value is an empty object, collection, map or set, has no enumerable properties or is any type that is not considered a collection.
+
+Check if the provided value is null or if its length is equal to 0. */
+const isEmpty = val => val == null || !(Object.keys(val) || val).length
+isEmpty(new Map()); // true
+isEmpty(new Set()); // true
+isEmpty([]); // true
+isEmpty({}); // true
+isEmpty(''); // true
+isEmpty([1, 2]); // false
+isEmpty({ a: 1, b: 2 }); // false
+isEmpty('text'); // false
+isEmpty(123); // true - type is not considered a collection
+isEmpty(true); // true - type is not considered a collection
+
+/* 是否为类数组 */
+const isArrayLike = obj => obj != null && typeof obj[Symbol.iterator] === 'function'
+isArrayLike(document.querySelectorAll('.className')); // true
+isArrayLike('abc'); // true
+isArrayLike(null); // false
+
+/* is  是否为某种数据类型 */
+const is = (type, val) => ![, null].includes(val) && val.constructor === type
+
+is(Array, [1]); // true
+is(ArrayBuffer, new ArrayBuffer()); // true
+is(Map, new Map()); // true
+is(RegExp, /./g); // true
+is(Set, new Set()); // true
+is(WeakMap, new WeakMap()); // true
+is(WeakSet, new WeakSet()); // true
+is(String, ''); // true
+is(String, new String('')); // true
+is(Number, 1); // true
+is(Number, new Number(1)); // true
+is(Boolean, true); // true
+is(Boolean, new Boolean(true)); // true
+
+/* 获取数据类型 */
+const getType = v => v === undefined ? 'undefined' : v === null ? 'null' : v.constructor.name.toLowerCase()
+getType(new Set([1, 2, 3])); // 'set'
+
+/* 记录时间消耗 */
+const timeTaken = callback => {
+  console.time('timeTaken');
+  const r = callback();
+  console.timeEnd('timeTaken');
+  return r;
+};
+timeTaken(() => Math.pow(2, 10)); // 1024, (logged): timeTaken: 0.02099609375ms
+
+/* 随机十六进制颜色 randomHexColorCode */
+const randomHexColorCode = () => {
+  let n = (Math.random() * 0xfffff * 1000000).toString(16);
+  return '#' + n.slice(0, 6);
+};
+randomHexColorCode(); // "#e34155"
+
+
+/* rgb转hex 十六进制 */
+const RGBToHex = (r, g, b) => ((r << 16) + (g << 8) + b).toString(16).padStart(6, '0');
+RGBToHex(255, 165, 1); // 'ffa501'
+
+
+/*  判断浏览器环境和Node环境 */
+const isBrowser = () => ![typeof window, typeof document].includes('undefined');
+isBrowser(); // true (browser)
+isBrowser(); // false (Node)
+
+/* 找出第一个不是 null/undefined 的东西 */
+const coalesce = (...args) => args.find(_ => ![undefined, null].includes(_))
+coalesce(null, undefined, '', NaN, 'Waldo'); // ""
+
+
 
 /* 函数防抖 debounce  那么多秒执行一次*/
 //1.0
@@ -329,3 +452,27 @@ const curry = (fn, arity = fn.length, ...args) =>
   arity <= args.length ? fn(...args) : curry.bind(null, fn, arity, ...args);
 curry(Math.pow)(2)(10); // 1024
 curry(Math.min, 3)(10)(50)(2); // 2
+
+/* hex to rgb */
+const hexToRGB = hex => {
+  let alpha = false,
+    h = hex.slice(hex.startsWith('#') ? 1 : 0);
+  if (h.length === 3) h = [...h].map(x => x + x).join('');
+  else if (h.length === 8) alpha = true;
+  h = parseInt(h, 16);
+  return (
+    'rgb' +
+    (alpha ? 'a' : '') +
+    '(' +
+    (h >>> (alpha ? 24 : 16)) +
+    ', ' +
+    ((h & (alpha ? 0x00ff0000 : 0x00ff00)) >>> (alpha ? 16 : 8)) +
+    ', ' +
+    ((h & (alpha ? 0x0000ff00 : 0x0000ff)) >>> (alpha ? 8 : 0)) +
+    (alpha ? `, ${h & 0x000000ff}` : '') +
+    ')'
+  );
+};
+hexToRGB('#27ae60ff'); // 'rgba(39, 174, 96, 255)'
+hexToRGB('27ae60'); // 'rgb(39, 174, 96)'
+hexToRGB('#fff'); // 'rgb(255, 255, 255)'

@@ -1,3 +1,147 @@
+/* 字母顺序排序字符串 */
+const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)).join('');
+sortCharactersInString('cabbage'); // 'aabbceg'
+
+/* 移除不是ASCII */
+const removeNonASCII = str => str.replace(/[^\x20-\x7E]/g, '');
+removeNonASCII('äÄçÇéÉêlorem-ipsumöÖÐþúÚ'); // 'lorem-ipsum'
+
+/* 转义html */
+const unescapeHTML = str =>
+  str.replace(
+    /&amp;|&lt;|&gt;|&#39;|&quot;/g,
+    tag =>
+      ({
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&#39;': "'",
+        '&quot;': '"'
+      }[tag] || tag)
+  );
+unescapeHTML('&lt;a href=&quot;#&quot;&gt;Me &amp; you&lt;/a&gt;'); // '<a href="#">Me & you</a>'
+
+/* 反转义html */
+const escapeHTML = str =>
+  str.replace(
+    /[&<>'"]/g,
+    tag =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag)
+  );
+escapeHTML('<a href="#">Me & you</a>'); // '&lt;a href=&quot;#&quot;&gt;Me &amp; you&lt;/a&gt;'
+
+/* url拼接 */
+const URLJoin = (...args) =>
+  args
+    .join('/')
+    .replace(/[\/]+/g, '/')
+    .replace(/^(.+):\//, '$1://')
+    .replace(/^file:/, 'file:/')
+    .replace(/\/(\?|&|#[^!])/g, '$1')
+    .replace(/\?/g, '&')
+    .replace('&', '?');
+URLJoin('http://www.google.com', 'a', '/b/cd', '?foo=123', '?bar=foo'); // 'http://www.google.com/a/b/cd?foo=123&bar=foo'
+
+/* 转驼峰命名 */
+const toCamelCase = str => {
+  let s =
+    str &&
+    str
+      .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+      .map(x => x.slice(0, 1).toUpperCase() + x.slice(1).toLowerCase())
+      .join('');
+  return s.slice(0, 1).toLowerCase() + s.slice(1);
+};
+toCamelCase('some_database_field_name'); // 'someDatabaseFieldName'
+toCamelCase('Some label that needs to be camelized'); // 'someLabelThatNeedsToBeCamelized'
+toCamelCase('some-javascript-property'); // 'someJavascriptProperty'
+toCamelCase('some-mixed_string with spaces_underscores-and-hyphens'); // 'someMixedStringWithSpacesUnderscoresAndHyphens'
+
+/* 短横线命名 KebabCase */
+
+const toKebabCase = str =>
+  str &&
+  str
+    .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(x => x.toLowerCase())
+    .join('-');
+toKebabCase('camelCase'); // 'camel-case'
+toKebabCase('some text'); // 'some-text'
+toKebabCase('some-mixed_string With spaces_underscores-and-hyphens'); // 'some-mixed-string-with-spaces-underscores-and-hyphens'
+toKebabCase('AllThe-small Things'); // "all-the-small-things"
+toKebabCase('IAmListeningToFMWhileLoadingDifferentURLOnMyBrowserAndAlsoEditingSomeXMLAndHTML'); // "i-am-listening-to-fm-while-loading-different-url-on-my-browser-and-also-editing-xml-and-html"
+
+/* 下划线命名 */
+const toSnakeCase = str =>
+  str &&
+  str
+    .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(x => x.toLowerCase())
+    .join('_');
+toSnakeCase('camelCase'); // 'camel_case'
+toSnakeCase('some text'); // 'some_text'
+toSnakeCase('some-mixed_string With spaces_underscores-and-hyphens'); // 'some_mixed_string_with_spaces_underscores_and_hyphens'
+toSnakeCase('AllThe-small Things'); // "all_the_smal_things"
+toSnakeCase('IAmListeningToFMWhileLoadingDifferentURLOnMyBrowserAndAlsoEditingSomeXMLAndHTML'); // "i_am_listening_to_fm_while_loading_different_url_on_my_browser_and_also_editing_some_xml_and_html"
+
+/* 过滤html 标签 */
+const stripHTMLTags = str => str.replace(/<[^>]*>/g, '');
+stripHTMLTags('<p><em>lorem</em> <strong>ipsum</strong></p>'); // 'lorem ipsum'
+
+/* 转标题格式 大写 */
+const toTitleCase = str =>
+  str
+    .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
+    .map(x => x.charAt(0).toUpperCase() + x.slice(1))
+    .join(' ');
+toTitleCase('some_database_field_name'); // 'Some Database Field Name'
+toTitleCase('Some label that needs to be title-cased'); // 'Some Label That Needs To Be Title Cased'
+toTitleCase('some-package-name'); // 'Some Package Name'
+toTitleCase('some-mixed_string with spaces_underscores-and-hyphens'); // 'Some Mixed String With Spaces Underscores And Hyphens'
+
+/* 转译HTML */
+const escapeHTML = str =>
+  str.replace(
+    /[&<>'"]/g,
+    tag =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag)
+  );
+escapeHTML('<a href="#">Me & you</a>'); // '&lt;a href=&quot;#&quot;&gt;Me &amp; you&lt;/a&gt;'
+
+/* 相同字母异序单词 anagram */
+const isAnagram = (str1, str2) => {
+  const normalize = str =>
+    str
+      .toLowerCase()
+      .replace(/[^a-z0-9]/gi, '')
+      .split('')
+      .sort()
+      .join('');
+  return normalize(str1) === normalize(str2);
+};
+isAnagram('iceman', 'cinema'); // true
+
+/* 大写单词首字母 
+Capitalizes the first letter of every word in a string.
+
+Use String.prototype.replace() to match the first character of each word and String.prototype.toUpperCase() to capitalize it.
+*/
+
+const capitalizeEveryWord = str => str.replace(/\b[a-z]/g, char => char.toUpperCase());
+capitalizeEveryWord('hello world!'); // 'Hello World!'
+
 // 变量交换
 
  let a = 'word', b = 'hello'

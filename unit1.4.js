@@ -555,7 +555,13 @@ function parseQueryString(str) {
   }
   return result;
 }
-
+const getURLParameters = url =>
+  (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce(
+    (a, v) => ((a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a),
+    {}
+  );
+  getURLParameters('http://url.com/page?name=Adam&surname=Smith'); // {name: 'Adam', surname: 'Smith'}
+getURLParameters('google.com'); // {}
 export function strToDom (str) {
   var wrapMap = {
     option: [1, '<select multiple="multiple">', '</select>'],
