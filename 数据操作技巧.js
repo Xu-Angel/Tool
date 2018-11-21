@@ -36,6 +36,14 @@ max([1, 2, 3]) // 3
 const sum = arr => arr.reduce((a, b) => (a + b), 0)
 sum([1, 2, 3]) // 6
 
+// Returns the sum of two or more numbers/arrays.
+const sum = (...arr) => [...arr].reduce((acc, val) => acc + val, 0);
+sum(...[1, 2, 3, 4]); // 10
+const sumBy = (arr, fn) =>
+  arr.map(typeof fn === 'function' ? fn : val => val[fn]).reduce((acc, val) => acc + val, 0);
+
+sumBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], o => o.n); // 20
+sumBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], 'n'); // 20
 
 // 数组拷贝
 
@@ -45,6 +53,13 @@ console.log(copyArray) // [1, "3", {…}, 666]
 
 /* slice() 返回数组副本 */
 
+/* 求中间值 Returns the median of an array of numbers. */
+const median = arr => {
+  const mid = Math.floor(arr.length / 2),
+    nums = [...arr].sort((a, b) => a - b);
+  return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
+};
+median([5, 6, 50, 1, -5]); // 5
 
 /* 数组过滤 false null 0 '' undefined NaN */
 //1.0 filter
@@ -211,6 +226,17 @@ const average = converge((a, b) => a / b, [
 ]);
 average([1, 2, 3, 4, 5, 6, 7]); // 4
 
+// 2.0
+const average = (...nums) => nums.reduce((acc, val) => acc + val, 0) / nums.length;
+average(...[1, 2, 3]); // 2
+average(1, 2, 3); // 2
+
+/* 平均值 by */
+const averageBy = (arr, fn) =>
+  arr.map(typeof fn === 'function' ? fn : val => val[fn]).reduce((acc, val) => acc + val, 0) /
+  arr.length;
+averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], o => o.n); // 5
+averageBy([{ n: 4 }, { n: 2 }, { n: 8 }, { n: 6 }], 'n'); // 5
 /* 数组偏移 */
 //1.0 slice
 const offset = (arr, offset) => [...arr.slice(offset), ...arr.offset(0, offset)]

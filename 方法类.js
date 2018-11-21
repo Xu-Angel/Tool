@@ -40,7 +40,7 @@ window.addEventListener(
 ); // Will log the window dimensions at most every 250ms
 
 /* Throttle 节流方法，用来返回一个新函数。只有当两次触发之间的时间间隔大于事先设定的值，这个新函数才会运行实际的任务。 */
-
+// 1.0
 function debounce(func, wait, immediateRun) {
     var timeout,
         startTime = new Date();
@@ -69,6 +69,35 @@ function realFunc(){
 $('input').on('keydown', debounce(realFunc, 500,1000));
 
 
+//2.0
+const throttle = (fn, wait) => {
+  let inThrottle, lastFn, lastTime;
+  return function() {
+    const context = this,
+      args = arguments;
+    if (!inThrottle) {
+      fn.apply(context, args);
+      lastTime = Date.now();
+      inThrottle = true;
+    } else {
+      clearTimeout(lastFn);
+      lastFn = setTimeout(function() {
+        if (Date.now() - lastTime >= wait) {
+          fn.apply(context, args);
+          lastTime = Date.now();
+        }
+      }, Math.max(wait - (Date.now() - lastTime), 0));
+    }
+  };
+};
+window.addEventListener(
+  'resize',
+  throttle(function(evt) {
+    console.log(window.innerWidth);
+    console.log(window.innerHeight);
+  }, 250)
+); // Will log the window dimensions at most every 250ms
+
 /* 生成 `GUID` */
 
 Math.guid = function(){
@@ -78,6 +107,29 @@ Math.guid = function(){
     }).toUpperCase();
 };
 
+/*  重复做多少次 对一个函数 */
+
+/* Iterates over a callback n times
+Use Function.call() to call fn n times or until it returns false. Omit the last argument, context, to use an undefined object (or the global object in non-strict mode) */
+
+const times = (n, fn, context = undefined) => {
+  let i = 0;
+  while (fn.call(context, i) !== false && ++i < n) {}
+};
+
+var output = '';
+times(5, i => (output += i));
+console.log(output); // 01234
+
+/* 解柯西化 https://30secondsofcode.org/function */
+const uncurry = (fn, n = 1) => (...args) => {
+  const next = acc => args => args.reduce((x, y) => x(y), acc);
+  if (n > args.length) throw new RangeError('Arguments too few!');
+  return next(fn)(args.slice(0, n));
+};
+const add = x => y => z => x + y + z;
+const uncurriedAdd = uncurry(add, 3);
+uncurriedAdd(1, 2, 3); // 6
 
 
 /* TODO:defer */
@@ -89,6 +141,24 @@ defer(console.log, 'a'), console.log('b'); // logs 'b' then 'a'
 document.querySelector('#someElement').innerHTML = 'Hello';
 longRunningFunction(); // Browser will not update the HTML until this has finished
 defer(longRunningFunction); // Browser will update the HTML then run the function
+
+/* runPromisesInSeries promise 队列 */
+
+const runPromisesInSeries = ps => ps.reduce((p, next) => p.then(next), Promise.resolve());
+const delay = d => new Promise(r => setTimeout(r, d));
+runPromisesInSeries([() => delay(1000), () => delay(2000)]); // Executes each promise sequentially, taking a total of 3 seconds to complete
+
+/* sleep 睡眠函数 */
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+async function sleepyWork() {
+  console.log("I'm going to sleep for 1 second.");
+  await sleep(1000);
+  console.log('I woke up after 1 second.');
+}
+
+
+
 
 /* 实现包含关系(`contains`) */
 
