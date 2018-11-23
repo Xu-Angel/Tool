@@ -476,3 +476,13 @@ const hexToRGB = hex => {
 hexToRGB('#27ae60ff'); // 'rgba(39, 174, 96, 255)'
 hexToRGB('27ae60'); // 'rgb(39, 174, 96)'
 hexToRGB('#fff'); // 'rgb(255, 255, 255)'
+
+/* 参数展开  */
+const flip = fn => (first, ...rest) => fn(...rest, first);
+let a = { name: 'John Smith' };
+let b = {};
+const mergeFrom = flip(Object.assign);
+let mergePerson = mergeFrom.bind(null, a);
+mergePerson(b); // == b
+b = {};
+Object.assign(b, a); // == b
