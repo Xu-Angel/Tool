@@ -1,3 +1,5 @@
+/* 获取浏览器页面判断（是否为其他页面新开的链接  referrer） */
+document.referrer
 /* 滚动回到顶部 */
 
 const scrollToTop = () => {

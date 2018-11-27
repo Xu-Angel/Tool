@@ -37,3 +37,11 @@ function getElementTop(elem){
 　　}
 　　return elemTop;
 }
+
+
+/* 判断元素是否出现在视窗中 */
+
+  const rect = ele.getBoundingClientRect()
+  const inViewport = rect.bottom > 0 && rect.right > 0 &&
+  rect.left < window.innerWidth &&
+  rect.top < window.innerHeight

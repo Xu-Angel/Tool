@@ -163,6 +163,31 @@ window.addEventListener(
 ); // Will log the window dimensions at most every 250ms
 
 /* Throttle 节流方法，用来返回一个新函数。只有当两次触发之间的时间间隔大于事先设定的值，这个新函数才会运行实际的任务。 */
+
+// 0.5
+function throttle(action, wait = 1000) {
+  let time = Date.now()
+    return function() {
+      if ((time + wait - Date.now()) < 0) {
+        action()
+        time = Date.now()
+      }
+    }
+}
+
+//0.9
+function throttle(action) {
+  let isRunning = false
+  return function() {
+    if (isRunning) return
+    isRunning = true
+    window.requestAnimationFrame(() => {
+      action()
+      isRunning = false
+    })
+  }
+}
+
 // 1.0
 function debounce(func, wait, immediateRun) {
     var timeout,
