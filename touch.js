@@ -1,3 +1,7 @@
+/* 
+https://github.com/xd-tayde/mtouch/blob/master/README_ZH.md
+*/
+
 function touch(ele, option) {
   ele.addEventListener("touchstart", function(e) {
     this.startX = e.touches[0].pageX
