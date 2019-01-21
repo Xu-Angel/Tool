@@ -11,8 +11,56 @@ const reg = {
   emial: /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/,
   // 只能填写中文或英文，限2-18个字符
   name: /^[\u4e00-\u9fa5|A-Za-z]{2,18}$/,
+  //验证密码 限6-18位字母或数字组合，区分大小写！
+  password: function (element, param, field) {
+    if (!/.{6,18}/.test(element.value)) {
+      return false;
+    }
+    //纯数字
+    if (/^\d+$/.test(element.value)) {
+      return false;
+    }
+    //纯字母
+    if (/^[a-z]+$/.test(element.value)) {
+      return false;
+    }
+    //纯字母
+    if (/^[A-Z]+$/.test(element.value)) {
+      return false;
+    }
+    //纯标点符号
+    if (/^[`~!@#$%^&*()\-=_+[\]\\{}|;':",./<>?]+$/.test(element.value)) {
+      return false;
+    }
+    if (!/^[0-9a-zA-Z`~!@#$%^&*()\-=_+[\]\\{}|;':",./<>?]{6,18}$/.test(element.value)) {
+      return false;
+    }
+    return true;
+  }
 }
 
 module.exports = {
   reg
 }
+
+// 判断字符类型
+String.prototype.kind = function () {
+  if (strPunct.indexOf(this) != -1) {
+      return 'punct';
+  }
+  var code = this.charCodeAt(0);
+  if (code >= 65296 && code <= 65305) {
+      return 'num-full';
+  }
+  if (code > 256) {
+      return 'zh';
+  }
+  if (code >= 48 && code <= 57) {
+      return 'num';
+  } else if (code >= 65 && code <= 90) {
+      return 'en-up';
+  } else if (code >= 97 && code <= 133) {
+      return 'en-low';
+  }
+  return 'unknown';
+};
