@@ -38,6 +38,21 @@ Date.prototype.format2 = function(fmt) {
   return fmt
 }
 
+const formatTime = date => {
+  date = new Date(date)
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1
+  const day = date.getDate()
+  const hour = date.getHours()
+  const minute = date.getMinutes()
+  const second = date.getSeconds()
+  return [year, month, day].map(formatNumber).join('/') + " " + [hour, minute, second].map(formatNumber).join(':')
+}
+const formatNumber = n => {
+  n = n.toString()
+  return n[1] ? n : '0' + n
+}
 // 使用
 format1(new Date(), 'yy-MM-dd hh:m:ss')  // 18-08-23 11:46:11
 new Date().format2('yyyy-M-d h:m:s')  // 2018-8-23 11:46:11
+console.log(formatTime('2018-8-23 11:30:20'));
