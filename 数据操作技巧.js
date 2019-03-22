@@ -487,4 +487,26 @@ const shank = (arr, index = 0, delCount = 0, ...elements) =>
 const names = ['alpha', 'bravo', 'charlie'];
 const namesAndDelta = shank(names, 1, 0, 'delta'); // [ 'alpha', 'delta', 'bravo', 'charlie' ]
 const namesNoBravo = shank(names, 1, 1); // [ 'alpha', 'charlie' ]
-console.log(names); // ['alpha', 'bravo', 'charlie']
+  console.log(names); // ['alpha', 'bravo', 'charlie']
+
+/* 数组操作取索引，值 for-of 在原生中最好  简单地说，for/of是遍历数组最可靠的方式，它比for循环简洁，并且没有for/in和forEach()那么多奇怪的特例。for/of的缺点是我们取索引值不方便，而且不能这样链式调用forEach(). forEach()。
+4 种循环语法，其他 3 种循环语法，都会忽略非数字属性：只有for/in不会忽略非数字属性： 所以，使用for/in遍历数组并不好。
+// 使用for/of获取数组索引，可以这样写：
+
+for (const [i, v] of arr.entries()) {
+    console.log(i, v);
+  }
+
+  for (var i = array.length; i--; ) {
+    // process array[i]
+  }
+
+  /* values() */
+  const myArr = [2,3,4]
+
+  let it = myArr.values();
+  
+  console.log(it.next());
+  console.log(it.next());
+  console.log(it.next());
+  console.log(it.next());
