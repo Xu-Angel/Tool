@@ -259,8 +259,8 @@ const intersectionBy = (a, b, fn) => {
   const s = new Set(b.map(fn))
   return a.filter(v => s.has(fn(v)))
 }
-intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [2.1]
-
+intersectionBy([2.1, 1.2], [2.3, 3.4], Math.floor); // [1.2]
+intersectionBy([{ x: 2 }, { x: 1 }], [{ x: 1 }], v => v.x); // [ { x: 2 } ]
 
 /* 数组中最长的项 */
 //1.0 reduce
@@ -510,3 +510,7 @@ for (const [i, v] of arr.entries()) {
   console.log(it.next());
   console.log(it.next());
   console.log(it.next());
+
+  /* 
+  https://www.liayal.com/article/5a7177acfb1bf64cecfdee9e
+  */

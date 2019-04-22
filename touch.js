@@ -33,16 +33,16 @@ function touch(ele, option) {
       }
       if (angle >= -45 && angle < 45) {
         // console.log('向右')
-        option.right(EVENT)
+        option.right && option.right(EVENT)
       } else if (angle >= 45 && angle < 135) {
         // console.log('向下')
-        option.down(EVENT)
+        option.down && option.down(EVENT)
       } else if (angle >= -135 && angle < -45) {
         // console.log('向s上')
-        option.up(EVENT)
+        option.up && option.up(EVENT)
       } else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
         // console.log('向左')
-        option.left(EVENT)
+        option.left && option.left(EVENT)
       }
     }
   })
