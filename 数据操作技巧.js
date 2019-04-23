@@ -322,6 +322,19 @@ Array.from(new Set(arr))
 const arr = [...new Set(arr)]
 //2. 通过索引来判断
 arr.filter((v, i, arr)=> arr.indexOf(v) === arr.lastIndexOf(v))
+//3. reduce
+var arr = ["apple", "orange", "apple", "orange", "pear", "orange"];
+arr.reduce((pre, next) => {
+  pre[next] = (pre[next] + 1) || 1
+  return pre
+}, {})
+function getWordCnt(){
+  return arr.reduce(function(prev,next){
+    prev[next] = (prev[next] + 1) || 1;
+    return prev;
+  },{});
+}
+console.log(getWordCnt());// { apple: 2, orange: 3, pear: 1 }
 
 /* 数组去重并且合并 */
 const union = (a, b) => Array.from(new Set([...a, ...b]));
