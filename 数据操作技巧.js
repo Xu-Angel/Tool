@@ -335,6 +335,11 @@ function getWordCnt(){
   },{});
 }
 console.log(getWordCnt());// { apple: 2, orange: 3, pear: 1 }
+// 3.1
+var newArr = arr.reduce(function (prev, cur) {
+  prev.indexOf(cur) === -1 && prev.push(cur);
+  return prev;
+}, []);
 
 /* 数组去重并且合并 */
 const union = (a, b) => Array.from(new Set([...a, ...b]));
