@@ -2,6 +2,9 @@
 const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)).join('');
 sortCharactersInString('cabbage'); // 'aabbceg'
 
+/* 生成随机十六进制代码 如：'#c618b2'*/
+'#' + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, '0');
+
 /* 移除不是ASCII */
 const removeNonASCII = str => str.replace(/[^\x20-\x7E]/g, '');
 removeNonASCII('äÄçÇéÉêlorem-ipsumöÖÐþúÚ'); // 'lorem-ipsum'
