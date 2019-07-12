@@ -1,4 +1,23 @@
 
+/* 错误辅助函数 */
+/* https://juejin.im/post/5d25b39bf265da1bb67a4176 */
+async function errorCaptured(asuncFunc) {
+  try {
+    const res = await asuncFunc()
+    return [null, res]
+  } catch (e) {
+    return [e, null]
+  }
+}
+// eg: 
+async function func() {
+  let [err, res] = await errorCaptured(asyncFunc)
+  if (err) {
+      //... 错误捕获
+  }
+  //...
+}
+
 /* 是否为绝对URL */
 
 const isAbsoluteURL = str => /^[a-z][a-z0-9+.-]*:/.test(str);
