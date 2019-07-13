@@ -1,3 +1,22 @@
+/**
+ * 树转换
+ * @param  {Array} 
+ * @return {Array}  树形嵌套数组
+ */
+const toThree = (data, pid = 'pid') => {
+  let map = {}
+  let result = []
+  let mapData = deepClone(data)
+
+  mapData.map(item => (map[item.id] = item))
+
+  mapData.map(item => {
+    let parent = map[item[pid]]
+    parent ? (parent.children || (parent.children = [])).push(item) : result.push(item)
+  })
+  return result
+}
+
 /* 字母顺序排序字符串 */
 const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)).join('');
 sortCharactersInString('cabbage'); // 'aabbceg'
