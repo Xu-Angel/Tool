@@ -57,6 +57,51 @@ clearInput: function (e) {
   }
 ```
 
+- switch -> object
+
+```js
+// Switch
+let createType = null;
+switch (contentType) {
+  case "post":
+    createType = () => console.log("creating a post...");
+    break;
+  case "video":
+    createType = () => console.log("creating a post...");
+    break;
+  default:
+    createType = () => console.log('unrecognized content type');
+}
+// object
+const contentType = {
+  post: () => console.log("creating a post...");
+  video: () => console.log("creating a post...");
+  default: () => console.log('unrecognized content type')
+}
+const CreateType = contentTypes[contentType] || contentTypes['default']
+```
+
+- reduce + 解构
+
+> https://30secondsofcode.org/#bifurcate
+
+```js
+const bifurcate = (arr, filter) =>
+  arr.reduce((acc, val, i) => (acc[filter[i] ? 0 : 1].push(val), acc), [[], []]);
+```
+
+```js
+const exampleValues = [2, 15, 8, 23, 1, 32];
+const [truthyValues, falseyValues] = examplesValues.reduce((arrays, exampleValue) => {
+  if (exampleValue > 10) {
+    arrays[0].push(exampleValue)
+    return arrays
+  }
+  arrays[1].push(exampleValue)
+  return arrays
+}, [[], []])
+```js
+
 ```js
 Component({
   /**
