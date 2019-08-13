@@ -349,6 +349,13 @@ deepFlatten([1, [2],
 const flatten = (arr, depth = 1) => arr.reduce((a, v) => a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v), [])
 flatten([1, [2], 3, 4]); // [1, 2, 3, 4]
 flatten([1, [2, [3, [4, 5], 6], 7], 8], 2); // [1, 2, 3, [4, 5], 6, 7, 8]
+/* 题外 
+var arr = [ [1, 2, 2], [3, 4, 5, 5], [6, 7, 8, 9, [11, 12, [12, 13, [14] ] ] ], 10];
+*/
+// 新api
+Array.from(new Set(arr.flat(Infinity))).sort((a, b) => { return a - b })
+// 瞎操作
+arr.toString().split(",").sort((a, b) => { return a - b }).map(Number)
 
 /*  找出两数组中不同的值 */
 //1. Set数据结构中有 has()方法
