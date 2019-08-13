@@ -653,6 +653,31 @@ function isInteger(x) {
   console.log(it.next());
   console.log(it.next());
 
-  /* 
-  https://www.liayal.com/article/5a7177acfb1bf64cecfdee9e
-  */
+  const findLastIndex = (arr, fn) =>
+  arr
+    .map((val, i) => [i, val])
+    .filter(([i, val]) => fn(val, i, arr))
+      .pop()[0];
+  
+
+// 索引最后索引
+// example
+findLastIndex([1, 2, 3, 4], n => n % 2 === 1); // 2
+
+findLastIndex([1, 2, 3, 4], n => n === 5);
+// Uncaught TypeError: Cannot read property '0' of undefined
+//  at findLastIndex (<anonymous>:5:11)
+// at <anonymous>:1:1
+  
+// For a better experience, add a default value.
+
+const findLastIndex = (arr, fn) =>
+  (arr
+    .map((val, i) => [i, val])
+    .filter(([i, val]) => fn(val, i, arr))
+    .pop() || [-1])[0];
+
+// example
+  findLastIndex([1, 2, 3, 4], n => n === 5); // -1
+
+  // https://www.liayal.com/article/5a7177acfb1bf64cecfdee9e
