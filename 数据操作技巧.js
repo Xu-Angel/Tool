@@ -344,6 +344,15 @@ deepFlatten([1, [2],
 ]); // [1,2,3,4,5]
 
 /* 数组任意平铺 */
+//0.1 迭代实现
+let arr = [1, 2, [3, 4, 5, [6, 7], 8], 9, 10, [11, [12, 13]]]
+const flatten = function (arr) {
+    while (arr.some(item => Array.isArray(item))) {
+        arr = [].concat(...arr)
+    }
+    return arr
+}
+console.log(flatten(arr))
 
 //1.0 isArray 加上reduce 函数 扩展
 const flatten = (arr, depth = 1) => arr.reduce((a, v) => a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v), [])
