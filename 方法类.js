@@ -316,7 +316,7 @@ const delay = d => new Promise(r => setTimeout(r, d));
 runPromisesInSeries([() => delay(1000), () => delay(2000)]); // Executes each promise sequentially, taking a total of 3 seconds to complete
 
 /* sleep 睡眠函数 */
-
+// https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/63
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 async function sleepyWork() {
   console.log("I'm going to sleep for 1 second.");
