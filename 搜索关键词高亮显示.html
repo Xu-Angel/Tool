@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>auto complete</title>
+  <style>
+      .highlight{color:red;}
+      </style>
+  <style>
+    bdi {
+      color: rgb(0, 136, 255);
+    }
+
+    li {
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+  https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/141
+  <div class="way1">
+      <input class="inp" type="text">
+      <section>
+        <ul class="container"></ul>
+      </section>
+  </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+/* way1 */
+  function debounce(fn, timeout = 300) {
+    let t;
+    return (...args) => {
+      if (t) {
+        clearTimeout(t);
+      }
+      t = setTimeout(() => {
+        fn.apply(fn, args);
+      }, timeout);
+    }
+  }
+
+  function memorize(fn) {
+    const cache = new Map();
+    return (name) => {
+      if (!name) {
+        container.innerHTML = '';
+        return;
+      }
+      if (cache.get(name)) {
+        container.innerHTML = cache.get(name);
+        return;
+      }
+      const res = fn.call(fn, name).join('');
+      cache.set(name, res);
+      container.innerHTML = res;
+    }
+  }
+
+  function handleInput(value) {
+    const reg = new RegExp(`\(${value}\)`);
+    const search = data.reduce((res, cur) => {
+      if (reg.test(cur)) {
+        const match = RegExp.$1;
+        res.push(`<li>${cur.replace(match, '<bdi>$&</bdi>')}</li>`);
+      }
+      return res;
+    }, []);
+    return search;
+  }
+  
+  const data = ["上海野生动物园", "上饶野生动物园", "北京巷子", "上海中心", "上海黄埔江", "迪士尼上海", "陆家嘴上海中心"]
+  const container = document.querySelector('.container');
+  const memorizeInput = memorize(handleInput);
+  document.querySelector('.inp').addEventListener('input', debounce(e => {
+    memorizeInput(e.target.value);
+  }))
+</script>
+
+<!-- way2 -->
+<div class="way2">
+    <div class="input">
+        <input type="text" oninput="search(event)">
+        <ul class="options"></ul>
+    </div>
+</div>
+
+<script>
+    const list = ['上海', '上海市', '上海海昌海洋公园', '上海市徐汇区', '上海自来水来自海上'];
+
+    function setList(value) {
+      const ul = document.querySelector('.way2 .options');
+      ul.innerHTML = '';
+      if (!value) {
+        ul.innerHTML = '';
+        return;
+      }
+      list.forEach((item, index) => {
+        if (item.indexOf(value) !== -1) {
+          const li = document.createElement('li');
+          const innerHtml = item.replace(value, `<span style="color:red">${value}</span>`);
+          console.log(innerHtml)
+          li.innerHTML = innerHtml;
+          li.setAttribute('key', index);
+          ul.appendChild(li);
+        }
+      })
+    }
+
+    function search(e) {
+      const value = e.target.value;
+      setList(value)
+    }
+</script>
+<!-- way3 -->
+<div id='app'></div>
+<script>
+    var myitem = {
+        template:`<div class='item'>
+            <p v-html="info.name"></p>
+        </div>`,
+        props:{
+            info:{
+                type:Object,
+                default:()=>{return {}},
+            }
+        }
+
+    }
+    var vm = new Vue({
+        el:'#app',
+        template:`
+        <div>
+            <input @input='inputSearchText'>
+            <myitem v-for='info in results' :key='info.name' :info='info'></item>
+        </div>
+        `,
+        data(){
+            return {
+                infos:[
+                    {name:'地铁1',},
+                    {name:'地铁6',},
+                    {name:'地铁7',},
+                    {name:'地铁10',},
+                    {name:'地铁11',},
+                    {name:'公交112',},
+                    {name:'公交597',},
+                    {name:'公交593',}, 
+                ],
+                results:[],
+            }
+        },
+        created() {
+            this.results = JSON.parse(JSON.stringify(this.infos));
+        },
+        methods: {
+            inputSearchText : (function(timeout){
+                var timer;
+                return function(e){
+                    if(timer){
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(() => {
+                        this.search(e.target.value);
+                        //this.search_text = e.target.value
+                    }, timeout);
+                }
+            })(100),
+            search(text){
+                var reg = RegExp(`(${text})`);
+                var results = JSON.parse(JSON.stringify(this.infos));
+                var matches = results.filter(info=>info.name.match(reg));
+                matches.forEach(info=>{
+                    info.name = info.name.replace(reg,`<span class='highlight'>$1</span>`
+                )});
+                this.results = matches;
+                console.log(this.results);
+            }
+        },
+        components:{
+            myitem,
+        },
+    })
+</script>
+</html>

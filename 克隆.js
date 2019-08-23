@@ -1,5 +1,6 @@
 /* 对象复制(包括原型链和自有属性的深度拷贝) */
 
+// https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/148
 
 // 1.
 function copyObject(orig) {
