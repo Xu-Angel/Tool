@@ -81,9 +81,9 @@ function convert(arr) {
   arr.map((it, idx, array) => {
     let parent = it.parentId;
 
-    if (parent === 0) {  // 根节点        
+    if (parent === 0) { // 根节点        
       tree.push(it);
-    } else {        
+    } else {
       array.map(item => {
         if (item.id === parent) {
           if (!item.children) {
@@ -117,3 +117,37 @@ const toThree = (data, pid = 'pid') => {
   })
   return result
 }
+
+var entry = {
+  a: {
+    b: {
+      c: {
+        dd: 'abcdd'
+      }
+    },
+    d: {
+      xx: 'adxx'
+    },
+    e: 'ae'
+  }
+}
+
+// 要求转换成如下对象
+var output = {
+  'a.b.c.dd': 'abcdd',
+  'a.d.xx': 'adxx',
+  'a.e': 'ae'
+}
+function flatObj(obj, parentKey = "", result = {}) {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      let keyName = `${parentKey}${key}`;
+      if (typeof obj[key] === 'object')
+        flatObj(obj[key], keyName+".", result)
+      else
+        result[keyName] = obj[key];
+    }
+  }
+  return result;
+}
+console.log(flatObj(entry)); 
