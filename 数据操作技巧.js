@@ -87,24 +87,6 @@ function convertCurrency(money) {
   }
   return chineseStr;
 }
-/**
- * 树转换
- * @param  {Array} 
- * @return {Array}  树形嵌套数组
- */
-const toThree = (data, pid = 'pid') => {
-  let map = {}
-  let result = []
-  let mapData = deepClone(data)
-
-  mapData.map(item => (map[item.id] = item))
-
-  mapData.map(item => {
-    let parent = map[item[pid]]
-    parent ? (parent.children || (parent.children = [])).push(item) : result.push(item)
-  })
-  return result
-}
 
 /* 字母顺序排序字符串 */
 const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)).join('');
@@ -344,6 +326,15 @@ deepFlatten([1, [2],
 ]); // [1,2,3,4,5]
 
 /* 数组任意平铺 */
+//0.1 迭代实现
+let arr = [1, 2, [3, 4, 5, [6, 7], 8], 9, 10, [11, [12, 13]]]
+const flatten = function (arr) {
+  while (arr.some(item => Array.isArray(item))) {
+    arr = [].concat(...arr)
+  }
+  return arr
+}
+console.log(flatten(arr))
 
 //1.0 isArray 加上reduce 函数 扩展
 const flatten = (arr, depth = 1) => arr.reduce((a, v) => a.concat(depth > 1 && Array.isArray(v) ? flatten(v, depth - 1) : v), [])
@@ -463,6 +454,40 @@ var newArr = arr.reduce(function (prev, cur) {
   prev.indexOf(cur) === -1 && prev.push(cur);
   return prev;
 }, []);
+
+/* 多类型去重 */
+/* ref https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/215
+如传入的数组元素为[123, "meili", "123", "mogu", 123]，则输出：[123, "meili", "123", "mogu"]
+如传入的数组元素为[123, [1, 2, 3], [1, "2", 3], [1, 2, 3], "meili"]，则输出：[123, [1, 2, 3], [1, "2", 3], "meili"]
+如传入的数组元素为[123, {a: 1}, {a: {b: 1}}, {a: "1"}, {a: {b: 1}}, "meili"]，则输出：[123, {a: 1}, {a: {b: 1}}, {a: "1"}, "meili"]
+*/
+// 考虑到数据类型为null, undefind等类型 包括数据为对象时key顺序不同的问题
+// 判断对象
+function isObj(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]'
+}
+// 对象重整 对key进行排序
+function parseObj(obj) {
+  let keys = Object.keys(obj).sort()
+  let newObj = {}
+  for (let key of keys) {
+    // 不晓得有没有有必要，反正把value为obj的情况也处理一下 - -
+    obj[key] = isObj(obj[key]) ? parseObj(obj[key]) : obj[key]
+    newObj[key] = obj[key]
+  }
+  return newObj
+}
+
+// 最后
+const arr = [1, '1', { a: 1, b: "1" }, { b: '1', a: 1 }, { a: 1, b: 2 },
+  [1, 2, 3], null, undefined, undefined
+]
+
+function passArr(arr) {
+  return [...new Set(arr.map(item =>
+    isObj(item) ? JSON.stringify(parseObj(item)) : (!item ? item : JSON.stringify(item))
+  ))].map(item => !item ? item : JSON.parse(item))
+}
 
 /* 数组去重并且合并 */
 const union = (a, b) => Array.from(new Set([...a, ...b]));
@@ -654,30 +679,30 @@ function isInteger(x) {
   console.log(it.next());
 
   const findLastIndex = (arr, fn) =>
-  arr
+    arr
     .map((val, i) => [i, val])
     .filter(([i, val]) => fn(val, i, arr))
-      .pop()[0];
-  
+    .pop()[0];
 
-// 索引最后索引
-// example
-findLastIndex([1, 2, 3, 4], n => n % 2 === 1); // 2
 
-findLastIndex([1, 2, 3, 4], n => n === 5);
-// Uncaught TypeError: Cannot read property '0' of undefined
-//  at findLastIndex (<anonymous>:5:11)
-// at <anonymous>:1:1
-  
-// For a better experience, add a default value.
+  // 索引最后索引
+  // example
+  findLastIndex([1, 2, 3, 4], n => n % 2 === 1); // 2
 
-const findLastIndex = (arr, fn) =>
-  (arr
-    .map((val, i) => [i, val])
-    .filter(([i, val]) => fn(val, i, arr))
-    .pop() || [-1])[0];
+  findLastIndex([1, 2, 3, 4], n => n === 5);
+  // Uncaught TypeError: Cannot read property '0' of undefined
+  //  at findLastIndex (<anonymous>:5:11)
+  // at <anonymous>:1:1
 
-// example
+  // For a better experience, add a default value.
+
+  const findLastIndex = (arr, fn) =>
+    (arr
+      .map((val, i) => [i, val])
+      .filter(([i, val]) => fn(val, i, arr))
+      .pop() || [-1])[0];
+
+  // example
   findLastIndex([1, 2, 3, 4], n => n === 5); // -1
 
   // https://www.liayal.com/article/5a7177acfb1bf64cecfdee9e
