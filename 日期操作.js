@@ -21,7 +21,7 @@ const getMeridiemSuffixOfInteger = num =>
       : num < 12
         ? (num % 12) + 'am'
         : (num % 12) + 'pm';
-EXAMPLES
+
 getMeridiemSuffixOfInteger(0); // "12am"
 getMeridiemSuffixOfInteger(11); // "11am"
 getMeridiemSuffixOfInteger(13); // "1pm"
@@ -30,3 +30,17 @@ getMeridiemSuffixOfInteger(25); // "1pm"
 /* 判断时间是否相同 */
 const isSameDate = (dateA, dateB) => dateA.toISOString() === dateB.toISOString();
 isSameDate(new Date(2010, 10, 20), new Date(2010, 10, 20)); // true
+
+/*比较时间是否为今天及以后 */
+const isFuture = (date) => {
+  const date = new Date()
+  const year = date.getFullYear();
+  const mon = date.getMonth() + 1;
+  const day = date.getDate();
+  const curTime = year + '-' + mon + '-' + day
+  if (new Date(e) - new Date(curTime) < 0) {
+      return false
+  }
+  return true
+
+}
