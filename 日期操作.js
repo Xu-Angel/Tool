@@ -30,14 +30,20 @@ getMeridiemSuffixOfInteger(25); // "1pm"
 /* 判断时间是否相同 */
 const isSameDate = (dateA, dateB) => dateA.toISOString() === dateB.toISOString();
 isSameDate(new Date(2010, 10, 20), new Date(2010, 10, 20)); // true
-
+/* 
+! 日期字符串格式 标准 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Date
+Date.parse() 支持 https://www.ecma-international.org/ecma-262/5.1/#sec-15.9.1.15 https://tools.ietf.org/html/rfc2822#page-14
+苹果IOS 不支持- （不支持ecma）
+在非手机环境日期字符串推荐用parse
+日期字符串推荐/ 而不是-
+*/
 /*比较时间是否为今天及以后 */
 const isFuture = (date) => {
   const date = new Date()
   const year = date.getFullYear();
   const mon = date.getMonth() + 1;
   const day = date.getDate();
-  const curTime = year + '-' + mon + '-' + day
+  const curTime = year + '/' + mon + '/' + day
   if (new Date(e) - new Date(curTime) < 0) {
       return false
   }
