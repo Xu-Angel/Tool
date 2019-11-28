@@ -5,6 +5,7 @@
 * 网站：https://089858.com
 * 使用说明：https://github.com/wuyumin/whatdevice
 */
+//TODO: 微信（手机、PC浏览器）
 ;(function(){
   var whatdevice = {};
   var myUA = window.navigator.userAgent.toLowerCase();
@@ -13,7 +14,7 @@
   /*
   * 是否移动设备：返回Boolean。
   */
-  whatdevice.isMobile = /(?:micromessenger|mobile|iphone|ipod|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|windows phone|win ce)/.test(myUA);
+  whatdevice.isMobile = /(?:mobile|iphone|ipod|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|windows phone|win ce)/.test(myUA);
 
   /*
   * 跳转到手机网站：参数1是手机网站网址。
