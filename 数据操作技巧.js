@@ -87,6 +87,8 @@ function convertCurrency(money) {
   }
   return chineseStr;
 }
+// 数字转中文（大写，小写）数字，金额 https://github.com/cnwhy/nzh
+
 
 /* 字母顺序排序字符串 */
 const sortCharactersInString = str => [...str].sort((a, b) => a.localeCompare(b)).join('');
