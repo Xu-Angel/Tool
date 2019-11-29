@@ -205,40 +205,40 @@ export function getDeviceType() {
   /*
    * 是否移动设备
    */
-  var isMobile = /(?:mobile|iphone|ipod|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|windows phone|win ce)/.test(UA)
+  var isMobile = /(?:mobile|iphone|ipod|ipad|android|coolpad|mmp|smartphone|midp|wap|xoom|symbian|j2me|blackberry|windows phone|win ce)/i.test(UA)
 
   /*
    * 是否苹果手机
    */
-  var isiOS = /(?:iphone)/.test(UA)
+  var isIOS = /iphone|mac|ipod|ipad/i.test(UA)
 
   /*
    * 是否安卓手机
    */
-  var isAndroid = /(?:android)/.test(UA)
+  var isAndroid = /(?:android)/i.test(UA)
 
   /*
    * 是否微信环境
    */
-  var isWechat = /(?:micromessenger)/.test(UA)
+  var isWechat = /(?:micromessenger)/i.test(UA)
 
   /*
-   * 是否手机微信环境
+   * 是否移动设备微信环境
    */
-  var isPhoneWechat = /(?:micromessenger)/.test(UA) && isMobile
+  var isPhoneWechat = /(?:micromessenger)/i.test(UA) && isMobile
 
   /*
-   * 是否微信环境
+   * 是否PC微信环境
    */
-  var isPCWechat = /(?:micromessenger)/.test(UA) && !isMobile
+  var isPCWechat = /(?:micromessenger)/i.test(UA) && !isMobile
 
   /*
    * 是否微信小程序
    * 微信7.0.0开始，可以通过判断userAgent中包含miniProgram字样来判断小程序web-view环境。
    */
-  var isWechatMiniProgram = /miniProgram/.test(UA) && isWechat
+  var isWechatMiniProgram = /miniProgram/i.test(UA) && isWechat
   return {
-    isiOS,
+    isIOS,
     isAndroid,
     isWechat,
     isPhoneWechat,
