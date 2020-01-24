@@ -3,10 +3,6 @@ const StartScore = rate => "★★★★★☆☆☆☆☆".slice(5 - rate, 10 -
 const start = StartScore(3);
 // start => "★★★"
 
-// 时间戳
-const timestamp = +new Date("2019-02-14");
-// timestamp => 1550102400000
-
 // config  对象字面量
 const env = "prod";
 const link = {

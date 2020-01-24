@@ -155,125 +155,7 @@ function leftAnimate(obj, target, sp) {
   }, 0)
 
 }
-/**
- * 
- * @param {*} time 传入倒计时，eg '2018/07/09 20:16:0'，返回天时分秒毫秒
- */
-function getTime(time) {
-  let end = new Date(time).getTime()
-  let now = Date.now()
-  let range = (+end) - (+now)
-  let day = parseInt(range / (24 * 3600000))
-  range = range % (24 * 3600000)
-  let hours = parseInt(range / 3600000)
-  range = range % 3600000
-  let minutes = parseInt(range / 60000)
-  range = range % 60000
-  let seconds = parseInt(range / 1000)
-  let miles = Number((range+ '').substring((range+ '').length-2))
-  if (range < 0) {
-    minutes = day = hours = seconds = 0
-  }
-  return {
-    day,
-    hours,
-    minutes,
-    seconds,
-    miles
-  }
-}
-//!todo/*   经过网上查找相关资料，得知，‘year-month-day’ 的格式只有 webkit内核浏览器 可用，而 ‘year/month/ady’ 格式适用于所有内核的浏览器，故平时编码，使用Date对象进行初始化时，建议使用‘year/month/day’格式 */
-/**
- * 
- * @param {*} time 秒杀时间eg '2018/07/09 20:16:0'
- * @param {*} day  day填充元素
- * @param {*} hour hour填充元素
- * @param {*} min  min填充元素
- * @param {*} sec  sec填充元素
- */
-function seckillTime(time, day, hour, min, sec, cb) {
-  function convert(val) {
-    return val >= 10 ? val : '0' + val
-  }
 
-  function show() {
-    const Time = getTime(time)
-    day.innerText = convert(Time.day)
-    hour.innerText = convert(Time.hours)
-    min.innerText = convert(Time.minutes)
-    sec.innerText = convert(Time.seconds)
-  }
-  show()
-  const timer = setInterval(function () {
-    const Time = getTime(time)
-    let zero = 0
-    zero += Time['day']
-    zero += Time['hours']
-    zero += Time['minutes']
-    zero += Time['seconds']
-    if (zero === 0) {
-      clearInterval(timer)
-      cb && cb()
-    }
-    show()
-  }, 1000)
-}
-//!todo/* 倒计时的封装
-/*封装的倒计时插件，异步回调方式使用 */
-(function(){
-    function countDown(targetTime, timing, timend) {
-        var nowTime = new Date().getTime()
-        targetTime = new Date(targetTime).getTime()
-        var timeRemaining = (+targetTime) - (+nowTime)
-
-        var numberCountTest = function(value) {
-            var numberTest = /^\d{2}$/
-
-            if(numberTest.test(value)) {
-                return value
-            } else {
-                return '0' + value
-            }
-        }
-
-        var getDay = function(millisecond) {
-            return numberCountTest(Math.floor(millisecond / 1000 / 60 / 60 / 24))
-        }
-
-        var getHours = function(millisecond) {
-            return numberCountTest(Math.floor(millisecond / 1000 / 60 / 60 % 24))
-        }
-
-        var getMinute = function(millisecond) {
-            return numberCountTest(Math.floor(millisecond / 1000 / 60 % 60))
-        }
-
-        var getSecond = function(millisecond) {
-            return numberCountTest(Math.floor(millisecond / 1000 % 60))
-        }
-
-        var timed = setInterval(function() {
-            timeRemaining -= 1000
-            if(timeRemaining <= 0) {
-                clearInterval(timed)
-                timend()
-            }else {
-                var timeObj = {
-                    day: getDay(timeRemaining),
-                    hours: getHours(timeRemaining),
-                    minute: getMinute(timeRemaining),
-                    second: getSecond(timeRemaining)
-                }
-                timing(timeObj)
-            }
-        }, 1000)
-    }
-    countDown('2017/11/4 17:21:00', function(timeObj) {
-        // console.log(timeObj.day, timeObj.hours, timeObj.minute, timeObj.second)
-    }, function() {
-        console.log('timed end')
-    })
-}())
 /**
  * 获取滚动条距离顶部和左侧的距离，兼容IE6+,Firefox,Chrome等
  */
@@ -397,8 +279,6 @@ function addEvent(obj, event, fn) {
   }
 }
 
-
-
 /*
 兼容getElementsByClassName
 */
@@ -506,15 +386,6 @@ function removeClass(el, className) {
   el.className = arr.join(' ');
 }
 
-/**
- * 返回(0,1)之间的随机数
- * @returns {number}
- */
-function random() {
-  return Math.random();
-}
-
-
 export function getUrlParam () {
   let result = {}
   let key = ''
@@ -600,26 +471,6 @@ export function strToDom (str) {
 
 var tableTr = strToDom('<tr><td>Simple text</td></tr>');
 document.querySelector('body').appendChild(tableTr);
-/**
- * @desc   格式化${startTime}距现在的已过时间
- * @param  {Date} startTime 
- * @return {String}
- */
-export function formatPassTime(startTime) {
-  var currentTime = Date.parse(new Date()),
-      time = currentTime - startTime,
-      day = parseInt(time / (1000 * 60 * 60 * 24)),
-      hour = parseInt(time / (1000 * 60 * 60)),
-      min = parseInt(time / (1000 * 60)),
-      month = parseInt(day / 30),
-      year = parseInt(month / 12);
-  if (year) return year + "年前"
-  if (month) return month + "个月前"
-  if (day) return day + "天前"
-  if (hour) return hour + "小时前"
-  if (min) return min + "分钟前"
-  else return '刚刚'
-}
 
 /**
  * 
@@ -679,21 +530,7 @@ const compact = arr => arr.filter(Boolean)
 compact([0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34])             // [ 1, 2, 3, 'a', 's', 34 ]
 [0, 1, false, 2, '', 3, 'a', 'e' * 23, NaN, 's', 34].filter(Boolean)
 
-//有时候比如显示时间的时候有时候会需要把一位数字显示成两位，这时候就需要补0操作，可以使用slice和string的padStart方法
-const addZero1 = (num, len = 2) => (`0${num}`).slice(-len)
-const addZero2 = (num, len = 2) => (`${num}`).padStart(len , '0')
-addZero1(3) // 03
-addZero2(32,4)  // 0032
-//时间戳转JS时间********************************************
-function setTime(t){
-  function toDou(n){
-    return n<10?'0'+n:''+n;
-  }
-  var oDate=new Date();
-  oDate.setTime(t*1000);
 
-  return oDate.getFullYear()+'-'+(oDate.getMonth()+1)+'-'+oDate.getDate()+'  '+toDou(oDate.getHours())+':'+toDou(oDate.getMinutes())+':'+toDou(oDate.getSeconds());
-}
 //运动框架***************************************
 function move(obj,json,option){
   var option=option || {};
@@ -757,31 +594,6 @@ function move(obj,json,option){
 function getStyle(obj,sName){
   return (obj.currentStyle || getComputedStyle(obj,false))[sName]
 }
-
-//查找数组中的最大值********************************************
-function findMax(arr){
-  var iMax=arr[0];
-  for(var i=0; i<arr.length; i++){
-      if(arr[i]>iMax){
-          iMax=arr[i];
-      }
-  }
-  return iMax;
-}
-
-//查找数组中的最小值********************************************
-function findMin(arr){
-  var iMin=arr[0];
-  for(var i=0; i<arr.length; i++){
-      if(arr[i]<iMin){
-          iMin=arr[i];
-      }
-  }
-  return iMin;
-}
-
-// 日期整理：利用字符串的replace替换功能+正则匹配 如 str ='20160920145530';
-str.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,'$1-$2-$3 $4:$5:$6') // => 2016-09-20 14:55:30 格式自己随便写，看情况
 
 /* 兼容classList（ie9）
 错误信息：
