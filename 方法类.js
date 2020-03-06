@@ -1,4 +1,18 @@
-
+/* 相对地址转绝对地址 */
+/**
+ * @description 相对路径转换成绝对路径方法
+ * @author zhangxinxu(.com)
+*/
+const relative2absolute = function (url, base) {
+  if (!base) {
+      base = location.protocol + location.host;
+  }
+  return new URL(url, base).href;
+  /* 浏览器环境 */
+  var ele = document.createElement('a');
+  ele.href = (base || '') + url;
+  return eleLink.href;
+}
 /* 错误辅助函数 */
 /* https://juejin.im/post/5d25b39bf265da1bb67a4176 */
 async function errorCaptured(asuncFunc) {
