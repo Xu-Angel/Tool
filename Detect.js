@@ -1,4 +1,5 @@
 /**
+ * https://github.com/lancedikson/bowser
  * 详细获取设备数据
  */
 export function detectDeviceType() {
