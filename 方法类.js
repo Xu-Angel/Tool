@@ -565,3 +565,25 @@ Object.assign(b, a); // == b
 var randomInt = function(min, max){
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
+
+/**
+ * 点击按钮实现复制文字
+ * @param {*} str 
+ */
+function copy(str) {
+  return new Promise(function(resolve, reject) {
+    let success = false
+    function listener(e) {
+      e.clipboardData.setData('text/plain', str)
+      e.preventDefault()
+      success = true
+    }
+    document.addEventListener('copy', listener)
+    document.execCommand('copy')
+    document.removeEventListener('copy', listener)
+    success ? resolve() : reject()
+  })
+}
+
+// usage:
+// copy(...).then(() => {})
